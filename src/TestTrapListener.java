@@ -5,5 +5,6 @@ import floodtrap.SNMPTrapEvent;
 public class TestTrapListener implements SNMPTrapListener {
   public void Notify(SNMPTrapEvent trap) {
     System.out.println("Got Event: " + trap.toString());
+    System.out.println("address = " + trap.Address());
   }
 };

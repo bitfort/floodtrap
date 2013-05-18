@@ -2,6 +2,8 @@ package floodtrap;
 
 import java.io.IOException;
 
+import java.util.Vector;
+
 import org.snmp4j.*;
 import org.snmp4j.smi.*;
 import org.snmp4j.util.*;
@@ -57,21 +59,21 @@ public class SNMP4JTrapper implements CommandResponder {
       System.out.println("error opening port to listen.");
     }
     snmp.addCommandResponder(this);
+    for (int i = 0; i < 100; i++) 
+      System.out.println("WE ARE HERE!");
   }
 
 
   @Override
   public synchronized void processPdu(final CommandResponderEvent respEvnt) {
-    System.out.println("We got one!!\n");
-    /*
     if (respEvnt != null && respEvnt.getPDU() != null) {
-      final Vector recVBs = respEvnt.getPDU().getVariableBindings();
+      SNMPTrapEvent e = new SNMPTrapEvent(respEvnt.getPeerAddress().toString());
+      final Vector<? extends VariableBinding> recVBs = respEvnt.getPDU().getVariableBindings();
       for (int i = 0; i < recVBs.size(); i++) {
         final VariableBinding recVB = recVBs.elementAt(i);
-        System.out.println(recVB.getOid() + " : " + recVB.getVariable());
+        e.AddVar(recVB.getOid().toString(), recVB.getVariable().toString());
       }
-
+      listen.Notify(e);
     }
-    */
   }
 };

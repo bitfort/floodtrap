@@ -17,6 +17,8 @@
 
 package net.floodlightcontroller.core.internal;
 
+import floodtrap.*;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -43,6 +45,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import net.floodlightcontroller.core.internal.SNMPTrapConvert;
 
 import net.floodlightcontroller.core.FloodlightContext;
 import net.floodlightcontroller.core.IFloodlightProviderService;
@@ -144,6 +148,9 @@ public class Controller implements IFloodlightProviderService,
     // OFSwitch driver binding map and order
     protected Map<String, IOFSwitchDriver>switchBindingMap;
     protected List<String> switchDescSortedList;
+
+    protected SNMPTrapBroadcast trapgen;
+    protected SNMP4JTrapper traps;
 
     // The activeSwitches map contains only those switches that are actively
     // being controlled by us -- it doesn't contain switches that are
@@ -1435,6 +1442,12 @@ public class Controller implements IFloodlightProviderService,
         ldd.addListener(type, listener);
     }
 
+
+    public synchronized void addSNMPTrapListener(ISNMPTrapListener l) {
+      trapgen.AddListener(new SNMPTrapConvert(l));
+    }
+  
+
     @Override
     public synchronized void removeOFMessageListener(OFType type,
                                                      IOFMessageListener listener) {
@@ -1795,6 +1808,15 @@ public class Controller implements IFloodlightProviderService,
         this.roleChanger = new RoleChanger(this);
         initVendorMessages();
         this.systemStartTime = System.currentTimeMillis();
+
+        // Initialize SNMP Server too
+        //
+        trapgen = new SNMPTrapBroadcast();
+        traps = new SNMP4JTrapper(trapgen);
+        traps.start();
+        this.addSNMPTrapListener(new TrapCounter());
+        //
+        ///// Done init SNMP server
 
         String option = configParams.get("flushSwitchesOnReconnect");
 

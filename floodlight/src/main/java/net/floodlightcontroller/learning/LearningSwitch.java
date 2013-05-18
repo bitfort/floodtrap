@@ -134,12 +134,13 @@ public class LearningSwitch implements IOFMessageListener, IFloodlightModule {
     match.loadFromPacket(pi.getPacketData(), pi.getInPort());
 
     Long sourceMac = Ethernet.toLong(match.getDataLayerSource());
+    /*
     Long destMac = Ethernet.toLong(match.getDataLayerestination());
 
     Short inputPort = pi.getInPort();
 
     if (!macToPort.containsKey(sourceMac)) 
-      macToPort.put(sourceMac, inputPort)
+      macToPort.put(sourceMac, inputPort);
 
     Short outPort = macToPort.get(destMac);
 
@@ -149,6 +150,7 @@ public class LearningSwitch implements IOFMessageListener, IFloodlightModule {
       // send to that port
     }
 
+    */
 		return Command.CONTINUE;
 	}
 

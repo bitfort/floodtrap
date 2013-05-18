@@ -58,6 +58,7 @@
         <include name="slf4j-api-1.6.4.jar"/>
         <include name="org.restlet-2.1-RC1.jar"/>
         <include name="org.restlet.ext.jackson-2.1-RC1.jar"/>
+        <include name="snmp4j-2.2.1.jar"/>
         <include name="org.restlet.ext.simple-2.1-RC1.jar"/>
         <include name="org.restlet.ext.slf4j-2.1-RC1.jar"/>
         <include name="simple-4.1.21.jar"/>
@@ -72,6 +73,11 @@
     </patternset>
 
     <path id="classpath">
+      <fileset dir=".">
+          <patternset>
+            <include name="lib"/>
+          </patternset>
+        </fileset>
         <fileset dir="${lib}">
             <patternset refid="lib"/>
         </fileset>
